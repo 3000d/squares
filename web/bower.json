@@ -1,0 +1,24 @@
+{
+  "name": "geeksprint-origami",
+  "version": "1.0.0",
+  "main": "web.js",
+  "authors": [
+    "Greg Berger <greg@3kd.be>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "WTFPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "p5js": "~0.4.4",
+    "jquery": "~2.1.3",
+    "bootstrap": "~3.3.4"
+  }
+}
