@@ -45,7 +45,7 @@ if(!debug) {
     console.log(cmd, args);
 
     if(cmd === "calib") {
-      io.emit("calib", {
+      io.emit("getcalib", {
         square: args[0],
         min: args[1],
         max: args[2]

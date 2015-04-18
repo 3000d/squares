@@ -29,7 +29,7 @@ $(function() {
   };
 
   var onSubmit = function(id, min, max) {
-    socket.emit('calib', {
+    socket.emit('setcalib', {
       square: id,
       min: min,
       max: max
@@ -41,7 +41,7 @@ $(function() {
     return s.substr(s.length-size);
   }
 
-  socket.on('calib', function(data) {
+  socket.on('getcalib', function(data) {
     $('#min-' + data.square).attr('value', data.min);
     $('#max-' + data.square).attr('value', data.max);
   });
