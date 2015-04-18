@@ -11,36 +11,42 @@ var SerialPort = serialport.SerialPort;
 var portName = process.argv[2];
 
 var connected=false;
+var debug = false;
 
-if(! portName){
-  util.log('give serial portName as argument (ex: /dev/cu.usbmodem1411)');
-  process.exit(0);
+if(!portName || portName !== "dev") {
+  util.log('No serial port given, DEBUG MODE');
+  debug = true;
 }
 
-var myPort = new SerialPort(portName, {
-  baudRate: 9600,
-  parser: serialport.parsers.readline("\r\n")
-});
+
+var myPort;
+
+if(!debug) {
+  myPort = new SerialPort(portName, {
+    baudRate: 9600,
+    parser: serialport.parsers.readline("\r\n")
+  });
 
 
-myPort.on('open', function(){
-  util.log('port open');
+  myPort.on('open', function(){
+    util.log('port open');
 
-});
-myPort.on('close', function() {
-  console.log('port closed');
+  });
+  myPort.on('close', function() {
+    console.log('port closed');
 
-});
-myPort.on('data', function(data){
-  util.log(data);
-});
+  });
+  myPort.on('data', function(data){
+    util.log(data);
+  });
 
 // called when there's an error with the serial port:
-myPort.on('error', function(error) {
-  console.log('there was an error with the serial port: ' + error);
-  myPort.close();
+  myPort.on('error', function(error) {
+    console.log('there was an error with the serial port: ' + error);
+    myPort.close();
 
-});
+  });
+}
 
 var Web = function() {
   app.use(express.static(__dirname + '/public_html/assets'));
@@ -58,9 +64,12 @@ var Web = function() {
 
       var id = data.id; //.replace('/slider-/','');
       var value = data.value;
-      if(myPort.isOpen()){
+
+      if(!debug && myPort.isOpen()){
         util.log("writing to port");
         myPort.write(''+id+'.'+value+"|");
+      } else {
+        console.log(id, value);
       }
     });
   });
