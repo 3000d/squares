@@ -22,11 +22,9 @@ var sketch = function(p){
       sliders[i] = input;
       slider_values[i] =0;
     }
-
   };
 
   p.draw = function(){
-
     for(var i = 0; i<SERVO_COUNT;i++ ){
       var value = sliders[i].value();
 
@@ -37,13 +35,8 @@ var sketch = function(p){
         console.log(data);
         socket.emit('move', data);
       }
-
     }
-
-
   };
-
-
-}
+};
 
 var gsSketch = new p5(sketch, 'p5-container');

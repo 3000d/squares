@@ -13,7 +13,9 @@ var portName = process.argv[2];
 var connected=false;
 var debug = false;
 
-if(!portName || portName !== "dev") {
+console.log(process.argv[2]);
+
+if(!portName || portName == "dev") {
   util.log('No serial port given, DEBUG MODE');
   debug = true;
 }
@@ -37,7 +39,18 @@ if(!debug) {
 
   });
   myPort.on('data', function(data){
-    util.log(data);
+    console.log('serial: ', data);
+    var args = data.split(' ');
+    var cmd = args.shift();
+    console.log(cmd, args);
+
+    if(cmd === "calib") {
+      io.emit("calib", {
+        square: args[0],
+        min: args[1],
+        max: args[2]
+      });
+    }
   });
 
 // called when there's an error with the serial port:
@@ -54,25 +67,31 @@ var Web = function() {
   app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public_html/index.html');
   });
+  app.get('/calib', function (req, res) {
+    res.sendFile(__dirname + '/public_html/calib.html');
+  });
 
   io.sockets.on('connection', function(socket){
-    util.log('hello');
     socket.on('disconnect', function(){
       util.log('disconnected');
     });
-    socket.on('move', function(data){
+    socket.on('setmove', function(data){
+      writeToSerial('move ' + data.id + ' ' + data.value);
+    });
 
-      var id = data.id; //.replace('/slider-/','');
-      var value = data.value;
-
-      if(!debug && myPort.isOpen()){
-        util.log("writing to port");
-        myPort.write(''+id+'.'+value+"|");
-      } else {
-        console.log(id, value);
-      }
+    socket.on('setcalib', function(data) {
+      writeToSerial('calib ' + data.square + ' ' + data.min + ' ' + data.max);
     });
   });
+
+
+  var writeToSerial = function(data) {
+    if(!debug) {
+      myPort.write(data);
+    } else {
+      console.log('write : ', data);
+    }
+  };
 
 
   this.startServer = function () {
