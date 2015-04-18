@@ -71,10 +71,7 @@ var Web = function() {
       util.log('-- [Web] listening on localhost:3000');
       // util.log(myPort.comName);
     });
-
   }
-
-
-}
+};
 
 module.exports = Web;
