@@ -13,8 +13,7 @@ int maxvalues[SERVOCOUNT];
 String str;
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("hello");
+  Serial.begin(115200);
 
   pwm.begin();
   
@@ -28,6 +27,39 @@ void setup() {
   
   minvalues[0] = 130;
   maxvalues[0] = 560;
+  
+  minvalues[1] = 150;
+  maxvalues[1] = 550;
+  
+  minvalues[2] = 145;
+  maxvalues[2] = 600;
+  
+  minvalues[3] = 123;
+  maxvalues[3] = 550;
+  
+  minvalues[4] = 143;
+  maxvalues[4] = 600;
+  
+  minvalues[5] = 150;
+  maxvalues[5] = 560;
+  
+  minvalues[6] = 155;
+  maxvalues[6] = 480;
+  
+  minvalues[7] = 143;
+  maxvalues[7] = 600;
+  
+  minvalues[8] = 124;
+  maxvalues[8] = 550;
+  
+  minvalues[9] = 150;
+  maxvalues[9] = 550;
+  
+  minvalues[10] = 200;
+  maxvalues[10] = 600;
+  
+  minvalues[11] = 135;
+  maxvalues[11] = 550;
   
   initAll();
   
@@ -84,6 +116,8 @@ void readSerial() {
      
     minvalues[servonum] = minimum;
     maxvalues[servonum] = maximum;
+    
+    initServo(servonum);
   }
   else if (str[0] == 'i') {
     initAll();

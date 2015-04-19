@@ -3,7 +3,7 @@
  */
 var sketch = function(p){
   var socket;
-  var SERVO_COUNT = 2;
+  var SERVO_COUNT = 16;
   var slider_values = [];
   var sliders = [];
   var threshold = 10;
@@ -32,8 +32,7 @@ var sketch = function(p){
         slider_values[i] = value;
         var id = sliders[i].attribute('id');
         var  data = {id:id, value:value};
-        console.log(data);
-        socket.emit('move', data);
+        socket.emit('setmove', data);
       }
     }
   };

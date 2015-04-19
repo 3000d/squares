@@ -1,6 +1,7 @@
+window.socket = io().connect('http://localhost:3000');
+
 $(function() {
   var $container = $('#calib-container');
-  var socket = io().connect('http://localhost:3000');
 
   var SQUARE_COUNT = 16;
 
@@ -13,9 +14,9 @@ $(function() {
 
   var createSquareForm = function(id) {
     var $formContainer = $("<form />");
-    var $span     = $("<span/>").html("square " + pad(id + 1, 2) + ' : ');
-    var $minValue = $("<input/>").attr('type', 'number').attr('id', 'min-'+id).attr('value', '100');
-    var $maxValue = $("<input/>").attr('type', 'number').attr('id', 'max-'+id).attr('value', '500');
+    var $span     = $("<span/>").html("square " + pad(id, 2) + ' : ');
+    var $minValue = $("<input/>").attr('type', 'number').attr('id', 'min-'+id).attr('value', 200);
+    var $maxValue = $("<input/>").attr('type', 'number').attr('id', 'max-'+id).attr('value', 450);
     var $submit   = $("<button/>").attr('id', 'submit-' + id).html('OK');
 
     $submit.on('click', function(e) {

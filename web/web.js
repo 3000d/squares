@@ -25,24 +25,24 @@ var myPort;
 
 if(!debug) {
   myPort = new SerialPort(portName, {
-    baudRate: 9600,
+    baudRate: 115200,
     parser: serialport.parsers.readline("\r\n")
   });
 
 
   myPort.on('open', function(){
     util.log('port open');
-
   });
+
   myPort.on('close', function() {
     console.log('port closed');
-
   });
+
   myPort.on('data', function(data){
-    console.log('serial: ', data);
     var args = data.split(' ');
     var cmd = args.shift();
-    console.log(cmd, args);
+
+    console.log(data);
 
     if(cmd === "calib") {
       io.emit("getcalib", {
@@ -71,23 +71,26 @@ var Web = function() {
     res.sendFile(__dirname + '/public_html/calib.html');
   });
 
+
+
   io.sockets.on('connection', function(socket){
     socket.on('disconnect', function(){
-      util.log('disconnected');
     });
+
     socket.on('setmove', function(data){
-      writeToSerial('move ' + data.id + ' ' + data.value);
+      writeToSerial('m ' + pad(data.id, 2) + ' ' + pad(data.value, 3));
     });
 
     socket.on('setcalib', function(data) {
-      writeToSerial('calib ' + data.square + ' ' + data.min + ' ' + data.max);
+      writeToSerial('c ' + pad(data.square, 2) + ' ' + pad(data.min, 3) + ' ' + pad(data.max, 3));
     });
   });
 
 
   var writeToSerial = function(data) {
     if(!debug) {
-      myPort.write(data);
+      console.log(data);
+      myPort.write(data + "\n");
     } else {
       console.log('write : ', data);
     }
@@ -99,6 +102,13 @@ var Web = function() {
       util.log('-- [Web] listening on localhost:3000');
       // util.log(myPort.comName);
     });
+  };
+
+
+  function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
   }
 };
 
